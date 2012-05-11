@@ -1,0 +1,12 @@
+[submodule "tests/vendor/Backbone.JS"]
+	path = tests/vendor/Backbone.JS
+	url = https://github.com/documentcloud/backbone.git
+[submodule "tests/vendor/qunit"]
+	path = tests/vendor/qunit
+	url = https://github.com/jquery/qunit.git
+[submodule "tests/vendor/underscore.js"]
+	path = tests/vendor/underscore.js
+	url = https://github.com/documentcloud/underscore.git
+[submodule "tests/vendor/jquery-mockjax"]
+	path = tests/vendor/jquery-mockjax
+	url = https://github.com/appendto/jquery-mockjax.git
