@@ -1,22 +1,23 @@
-_.extend( Backbone.Collection.prototype, Backbone.actAs.Paginatable );
+Backbone.actAs.Paginatable.init();
 var TestModel = Backbone.Model.extend({
 		defaults: {
 			name: 'defaultName'
-		}
+		},
+		urlRoot: '/rest/test'
 	}),
 
 	TestCollection = Backbone.Collection.extend({
 		model: TestModel,
-		urlRoot: '/testme.json'
+		urlRoot: '/testme'
 	}),
 
 	TestCollectionWithQ = Backbone.Collection.extend({
 		model: TestModel,
-		urlRoot: '/testme.json?hello=1&world=2'
+		urlRoot: '/testme?hello=1&world=2'
 	});
 
 $.mockjax({
-	url: '/testme.json*',
+	url: '/testme*',
 	dataType: 'json',
 	responseTime: 0,
 	response: function(settings) {
@@ -32,7 +33,7 @@ $.mockjax({
 			urlData[data.split('=')[0]] = data.split('=')[1];
 		} );
 		for(var i=0; i< maxResults; i++ ){
-			mockData.push({name: i});
+			mockData.push({name: i, id: i});
 		}
 
 		this.headers['X-Pagination-Total-Results'] = maxResults;
@@ -40,7 +41,7 @@ $.mockjax({
 		this.headers['X-Pagination-Items-Per-Page'] = urlData['itemsPerPage'];
 
 		var start = (urlData['page']-1)*urlData['itemsPerPage'];
-		
+
 		this.responseText = mockData.slice( start , start+parseInt(urlData['itemsPerPage']) );
 
 	}

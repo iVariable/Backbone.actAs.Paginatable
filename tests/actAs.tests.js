@@ -10,12 +10,12 @@ var TestModel = Backbone.Model.extend({
 
 	TestCollection = Backbone.Collection.extend({
 		model: TestModel,
-		urlRoot: '/testme.json'
+		urlRoot: '/testme'
 	}),
 
 	TestCollectionWithQ = Backbone.Collection.extend({
 		model: TestModel,
-		urlRoot: '/testme.json?hello=1&world=2'
+		urlRoot: '/testme?hello=1&world=2'
 	});
 
 test('Simple getters',function(){
@@ -41,14 +41,14 @@ test('URL construction', function(){
 	collection.currentPage(2);
 	collection.itemsPerPage(48);
 
-	equal( collection.url(), '/testme.json?page=2&itemsPerPage=48', 'url() with default attributes naming' );
+	equal( collection.url(), '/testme?page=2&itemsPerPage=48', 'url() with default attributes naming' );
 
 	collectionWithQ.currentPage(2);
 	collectionWithQ.itemsPerPage(48);
 	collectionWithQ.actAs_Paginatable_currentPage_attr = 'currentpage';
 	collectionWithQ.actAs_Paginatable_itemsPerPage_attr = 'ipp';
 
-	equal( collectionWithQ.url(), '/testme.json?hello=1&world=2&currentpage=2&ipp=48', 'url() with custom attributes and naming' );
+	equal( collectionWithQ.url(), '/testme?hello=1&world=2&currentpage=2&ipp=48', 'url() with custom attributes and naming' );
 
 });
 
@@ -128,5 +128,17 @@ test('Paginating thru collection', 14, function(){
 		});
 
 
+	});
+});
+
+test('Model url test', function(){
+	var collection = new TestCollection();
+	stop();
+	collection.fetch().always(function(){
+		start();
+		var model = collection.at(0),
+			newModel = collection.create();
+		equal( model.url(), '/testme/0', 'Existing model url' );
+		equal( newModel.url(), '/testme', 'New model url' )
 	});
 });

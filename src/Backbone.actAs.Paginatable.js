@@ -1,5 +1,26 @@
 Backbone.actAs = Backbone.actAs || {};
-Backbone.actAs.Paginatable = (function(){
+
+Backbone.actAs.Paginatable = {
+	init: function(collection, model){
+		collection	= collection || Backbone.Collection;
+		model		= model || Backbone.Model;
+		_.extend(collection.prototype, Backbone.actAs.Paginatable.Collection);
+		_.extend(model.prototype, Backbone.actAs.Paginatable.Model);
+	}
+}
+
+Backbone.actAs.Paginatable.Model = (function(){
+	return {
+		urlRoot: function(){
+			if( this.collection && this.collection.urlRoot ){
+				return this.collection.urlRoot;
+			}
+			return false;
+		}
+	};
+})();
+
+Backbone.actAs.Paginatable.Collection = (function(){
 	return {
 
 		actAs_Paginatable_totalItems: false,
@@ -65,7 +86,7 @@ Backbone.actAs.Paginatable = (function(){
 
 		url: function(){
 			if( typeof this.urlRoot == 'undefined' ){
-				throw Error('urlRoot for collection must be defined before fetching!');
+				return Backbone.Collection.prototype.url.apply(this, arguments );
 			}
 			var params = {};
 			params[this.actAs_Paginatable_currentPage_attr] = this.actAs_Paginatable_currentPage;
