@@ -1,12 +1,17 @@
 # About Backbone.actAs.Paginatable
 ==========================
 
-Paginatable backbone collections for large model sets.
+Paginatable backbone collections for large model sets. Request your collections piece by piece.
 
 # Getting started
 
-No special requirements for frontend.
-As for the backend you need to pass special "X-Pagination-Total-Results" header with total number of models in your set.
+No special requirements for frontend. Tested on Backbone v0.9.2
+
+As for the backend you need to pass special "X-Pagination-Total-Results" header
+with total number of models in your set if you want to use paginationInfo() method.
+
+If you just want next page, and you don't need knowledge about how mush pages left (like twitter posts strip)
+you can skip "X-Pagination-Total-Results" implemetation.
 
 ## Setup plugin
 
