@@ -12,10 +12,13 @@ Backbone.actAs.Paginatable = {
 Backbone.actAs.Paginatable.Model = (function(){
 	return {
 		urlRoot: function(){
+			if( this.collection && this.collection.modelUrlRoot ){
+				return this.collection.modelUrlRoot;
+			}
 			if( this.collection && this.collection.urlRoot ){
 				return this.collection.urlRoot;
 			}
-			return false;
+			return this.prototype.urlRoot;
 		}
 	};
 })();
@@ -54,8 +57,9 @@ Backbone.actAs.Paginatable.Collection = (function(){
 			return result;
 		},
 
-		nextPage: function(){
-			return this.loadPage(this.paginationInfo().nextPage);
+		nextPage: function(force){
+			var nextPage = force?(this.currentPage()+1):this.paginationInfo().nextPage;
+			return this.loadPage(nextPage);
 		},
 
 		previousPage: function(){

@@ -1,4 +1,3 @@
-Backbone.actAs.Paginatable.init();
 var TestModel = Backbone.Model.extend({
 		defaults: {
 			name: 'defaultName'
@@ -13,8 +12,12 @@ var TestModel = Backbone.Model.extend({
 
 	TestCollectionWithQ = Backbone.Collection.extend({
 		model: TestModel,
-		urlRoot: '/testme?hello=1&world=2'
+		urlRoot: '/testme?hello=1&world=2',
+		modelUrlRoot: '/testme'
 	});
+
+Backbone.actAs.Paginatable.init(TestCollection, TestModel);
+Backbone.actAs.Paginatable.init(TestCollectionWithQ, TestModel);
 
 $.mockjax({
 	url: '/testme*',

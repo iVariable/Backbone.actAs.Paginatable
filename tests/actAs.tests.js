@@ -2,21 +2,6 @@ module('Backbone.actAs.Paginatable');
 
 //Initialization
 _.extend( Backbone.Collection.prototype, Backbone.actAs.Paginatable );
-var TestModel = Backbone.Model.extend({
-		defaults: {
-			name: 'defaultName'
-		}
-	}),
-
-	TestCollection = Backbone.Collection.extend({
-		model: TestModel,
-		urlRoot: '/testme'
-	}),
-
-	TestCollectionWithQ = Backbone.Collection.extend({
-		model: TestModel,
-		urlRoot: '/testme?hello=1&world=2'
-	});
 
 test('Simple getters',function(){
 
@@ -132,12 +117,23 @@ test('Paginating thru collection', 14, function(){
 });
 
 test('Model url test', function(){
-	var collection = new TestCollection();
-	stop();
+	var collection = new TestCollection(),
+		collectionWithQ = new TestCollectionWithQ();
+
+	stop(2);
+
 	collection.fetch().always(function(){
 		start();
 		var model = collection.at(0),
 			newModel = collection.create();
+		equal( model.url(), '/testme/0', 'Existing model url' );
+		equal( newModel.url(), '/testme', 'New model url' )
+	});
+
+	collectionWithQ.fetch().always(function(){
+		start();
+		var model = collectionWithQ.at(0),
+			newModel = collectionWithQ.create();
 		equal( model.url(), '/testme/0', 'Existing model url' );
 		equal( newModel.url(), '/testme', 'New model url' )
 	});
