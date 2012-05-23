@@ -138,3 +138,36 @@ test('Model url test', function(){
 		equal( newModel.url(), '/testme', 'New model url' )
 	});
 });
+
+test('Additional URL params', 7, function(){
+	var collection = new TestCollection(),
+		params = {
+			first: 1,
+			second: 'ololo'
+		},
+		paramsWithThird = {
+			first: 1,
+			second: 'ololo',
+			third: 'test'
+		};
+
+	deepEqual( collection.getUrlParams(), {}, 'No params by default' );
+
+
+	deepEqual( collection.setUrlParams(params), params, 'Setter return current value');
+	deepEqual( collection.getUrlParams(), params, 'Params set');
+
+	var gettedParams = collection.getUrlParams();
+	gettedParams.first = 2;
+	gettedParams['third'] = 'Piupiu';
+	deepEqual( collection.getUrlParams(), params, 'getUrlParams returning cloned param versions');
+
+	collection.setUrlParam('third', paramsWithThird.third);
+	deepEqual( collection.getUrlParams(), paramsWithThird, 'setUrlParam');
+
+	collection.removeUrlParam('third');
+	deepEqual( collection.getUrlParams(), params, 'removeUrlParam');
+
+	equal( collection.url(), '/testme?first=1&second=ololo&page=1&itemsPerPage=20', 'Url constructed with additional params' );
+
+});

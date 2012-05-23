@@ -1,7 +1,8 @@
 # About Backbone.actAs.Paginatable
 ==========================
 
-Paginatable backbone collections for large model sets. Request your collections piece by piece.
+Paginatable backbone collections for large model sets. Request your collections
+piece by piece.
 
 # Getting started
 
@@ -10,12 +11,13 @@ No special requirements for frontend. Tested on Backbone v0.9.2
 As for the backend you need to pass special "X-Pagination-Total-Results" header
 with total number of models in your set if you want to use paginationInfo() method.
 
-If you just want next page, and you don't need knowledge about how mush pages left (like twitter posts strip)
-you can skip "X-Pagination-Total-Results" implemetation.
+If you just want next page, and you don't need knowledge about how mush pages
+left (like twitter posts strip) you can skip "X-Pagination-Total-Results" implemetation.
 
 ## Setup plugin
 
-Call Backbone.actAsPaginatable.init( collection, model ) on your collections and models and they'll become paginatable.
+Call Backbone.actAsPaginatable.init( collection, model ) on your collections and
+models and they'll become paginatable.
 
 ## Usage examples
 
@@ -62,7 +64,8 @@ ThisYearNewsCollection.fetch().done(function(){ // request to server: /rest/2012
 
 ### Custom page parameters
 
-If you are not satisfied with predefined parameter names for backend (page, itemsPerPage) you can set your own.
+If you are not satisfied with predefined parameter names for backend (page, itemsPerPage)
+you can set your own.
 
 ```javascript
 ThisYearNewsCollection.actAs_Paginatable_currentPage_attr = 'p';
@@ -74,10 +77,11 @@ ThisYearNewsCollection.itemsPerPage(7); // ...with 7 results on page
 ThisYearNewsCollection.fetch(); // request to server: /rest/2012/news?p=2&ipp=7
 ```
 
-### Custom parameters in collections url
+### Custom static parameters in collections url
 
-If you need to use parametrized url for fetching your collections (/rest/2012/news?onlyactive=1&author=iv),
-then you should set special modelUrlRoot parameter to your collection, to get correct url for models.
+If you need to use parametrized url for fetching your collections
+(/rest/2012/news?onlyactive=1&author=iv), then you should set special `modelUrlRoot`
+parameter to your collection, to get correct url for models.
 
 ```javascript
 /**
@@ -99,6 +103,49 @@ var NewsModel = Backbone.Model.extend({}),
  */
 Backbone.actAs.Paginatable.init(NewsCollection, NewsModel);
 ```
+
+### Custom dynamic parameters in collections url
+
+If your need to dynamically add/remove parameters for fetching your collections
+during the runtime of your app (for example - setting filters, sorting, etc)
+you don't need to change urlRoot and manually set params in url. All paginatable
+collections have special methods for managing additional url params.
+
+```javascript
+//This is our paginatable collection;
+var NewsCollection = new MyCoolPaginatableCollection();
+
+//For example we always fetching news collection for year 2012
+NewsCollection.urlRoot = '/rest/news/?year=2012';
+
+//Let's fetch our collection. Request goes to: /rest/news/?year=2010&page=1&itemsPerPage=20
+NewsCollection.fetch();
+
+//Somewhere in our app we have author filter in authorFilter variable
+var authorFilter = 'John',
+	orderSort = 'author_asc';
+
+NewsCollection
+	.setUrlParam('author', authorFilter)
+	.setUrlParam('order', orderSort)
+;
+
+//Now request goes to: /rest/news/?year=2010&author=John&order=author_asc&page=1&itemsPerPage=20
+NewsCollection.fetch();
+
+//Let's look in our additional params
+console.log(NewsCollection.getUrlParams());
+
+//Removing order param
+NewsCollection.removeUrlParam('order');
+
+//Bulk set params. Replacing all already setted params.
+NewsCollection.setUrlParams({
+	newParam: 1,
+	anotherParam: 2
+});
+```
+
 
 For more detailed usage examples look into tests/ directory.
 
@@ -126,12 +173,19 @@ This plugin provides you (and your collections) special methods:
 It's just requesting "currentPage()+1" page
 5. previousPage() - method for fetching previous page of results. Returns $.Deferred
 6. loadPage( page ) - method for fetching custom page of results. Returns $.Deferred
+7. setUrlParams(), getUrlParams(), setUrlParam(), removeUrlParam() - methods for managing additional params for fetching collection
 
 # ChangeLog
 
+## v0.2.1
+
+* Added setUrlParams(), getUrlParams(), setUrlParam(), removeUrlParam()
+
 ## v0.2
-- Added modelUrlRoot parameter
-- Ready for usage
+
+* Added modelUrlRoot parameter
+* Ready for usage
 
 ## v0.1a
- - Alpha release. Just proof of concept :)
+
+* Alpha release. Just proof of concept :)

@@ -88,11 +88,36 @@ Backbone.actAs.Paginatable.Collection = (function(){
 			return result;
 		},
 
+		getUrlParams: function(){
+			if( typeof this.urlParams == 'undefined' ) this.urlParams = {};
+			return _.clone(this.urlParams);
+		},
+
+		setUrlParams: function(params){
+			this.urlParams = _.clone(params);
+			return this.getUrlParams();
+		},
+
+		removeUrlParam: function(param){
+			var params = this.getUrlParams();
+			delete params[param];
+			this.setUrlParams(params);
+			return this;
+		},
+
+		setUrlParam: function(param, value){
+			var params = this.getUrlParams();
+			params[param] = value;
+			this.setUrlParams(params);
+			return this;
+		},
+
+
 		url: function(){
 			if( typeof this.urlRoot == 'undefined' ){
 				return Backbone.Collection.prototype.url.apply(this, arguments );
 			}
-			var params = {};
+			var params = this.getUrlParams();
 			params[this.actAs_Paginatable_currentPage_attr] = this.actAs_Paginatable_currentPage;
 			params[this.actAs_Paginatable_itemsPerPage_attr] = this.actAs_Paginatable_itemsPerPage;
 			return this.urlRoot + ((this.urlRoot.indexOf('?')===-1)?'?':'&') + $.param(params);
