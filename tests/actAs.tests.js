@@ -171,3 +171,27 @@ test('Additional URL params', 7, function(){
 	equal( collection.url(), '/testme?first=1&second=ololo&page=1&itemsPerPage=20', 'Url constructed with additional params' );
 
 });
+
+test( 'receive', 6, function(){
+	var collection = new TestCollection(),
+		testId = 21,
+		existingTestId = 2;
+	stop();
+	collection.fetch().done(function(){
+		start();
+		var existingObject = collection.get(existingTestId);
+		ok( existingObject, 'There is 2d object in collection' );
+		ok( !collection.get(testId), 'There is no 21st object on the first page of results' );
+		stop(2);
+		collection.receive(existingTestId).done(function(object){
+			start();
+			equal( object.id, existingTestId, 'Object receieved from collection' );
+			equal( existingObject, object, 'really an object from collection' );
+		});
+		collection.receive(testId).done(function(object){
+			start();
+			equal( object.id, testId, 'Object receieved from server' );
+			equal( object.get('name'), testId, 'Right name' );
+		});
+	});
+} );

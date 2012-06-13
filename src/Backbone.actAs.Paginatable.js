@@ -33,6 +33,29 @@ Backbone.actAs.Paginatable.Collection = (function(){
 		actAs_Paginatable_currentPage_attr: 'page',
 		actAs_Paginatable_itemsPerPage_attr: 'itemsPerPage',
 
+		receive: function(id){
+			var result = $.Deferred(),
+				model = this.get(id);
+			if( model ){
+				result.resolve(model);
+			}else{
+				model = new this.model({id: id});
+				if( this.modelUrlRoot ){
+					model.url = this.modelUrlRoot+'/'+id;
+				}else if( this.urlRoot ){
+					model.url = this.urlRoot+'/'+id;
+				}
+
+				model.fetch().done(function(){
+					result.resolve(model);
+				})
+				.fail(function(){
+					result.reject();
+				})
+			}
+			return result.promise();
+		},
+
 		itemsPerPage: function( itemsPerPage ){
 			if( typeof itemsPerPage != 'undefined' ){
 				this.actAs_Paginatable_itemsPerPage = itemsPerPage;

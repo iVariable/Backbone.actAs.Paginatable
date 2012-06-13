@@ -19,6 +19,17 @@ var TestModel = Backbone.Model.extend({
 Backbone.actAs.Paginatable.init(TestCollection, TestModel);
 Backbone.actAs.Paginatable.init(TestCollectionWithQ, TestModel);
 
+
+$.mockjax({
+	url: /\/testme\/(\d+)$/i,
+	dataType: 'json',
+	responseTime: 0,
+	response: function(settings) {
+		var id = settings.url.replace(/\/testme\//i,'');
+		this.responseText = { id: id, name:id };
+	}
+});
+
 $.mockjax({
 	url: '/testme*',
 	dataType: 'json',

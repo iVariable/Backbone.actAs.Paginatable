@@ -146,6 +146,44 @@ NewsCollection.setUrlParams({
 });
 ```
 
+### Get model from whole collection (from other pages)
+
+Then you need to get a model from your collection you can use get() method. But since we have paginatable collections,
+there is a situations than requested model is not located in the loaded piece of collection. So get() will return false;
+Of course, you can manually create this model, set an ID and URL for it and fetch it from server.
+But this isn't a good idea because you need to get this URL from somewhere. So, there is another way - receive().
+
+```javascript
+//This is our paginatable collection;
+var NewsCollection = new MyCoolPaginatableCollection();
+
+//For example we always fetching news collection for year 2012
+NewsCollection.urlRoot = '/rest/news/?year=2012';
+
+// Our special parameter for model url
+NewsCollection.modelUrlRoot = '/rest/news';
+
+var news = NewsCollection.get(3212);
+console.log( news ); //Oops! Sorry, sir. There is no such a model!
+
+NewsCollection
+    .receive(3212) //returns deferred object
+    .done(function(news){ //request goes to /rest/news/3212
+        console.log( news );// Oh! Here we are!
+    })
+    .fail(function(){
+        console.log('There is no such a model on server!');
+    });
+
+```
+
+receive() method is clever and if needed model is already loaded in collection it won't made another request for this model,
+but will return you an existing model.
+
+IMPORTANT!
+receive() method doesn't adds received model to current collection! If you need to add it to current page result set -
+do it manually (collection.add(model));
+
 
 For more detailed usage examples look into tests/ directory.
 
@@ -174,8 +212,13 @@ It's just requesting "currentPage()+1" page
 5. previousPage() - method for fetching previous page of results. Returns $.Deferred
 6. loadPage( page ) - method for fetching custom page of results. Returns $.Deferred
 7. setUrlParams(), getUrlParams(), setUrlParam(), removeUrlParam() - methods for managing additional params for fetching collection
+8. receive() - get model from server by id
 
 # ChangeLog
+
+## v0.2.2
+
+* Added receive() method
 
 ## v0.2.1
 
