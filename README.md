@@ -208,7 +208,7 @@ This plugin provides you (and your collections) special methods:
 3. currentPage() - setter/getter for current page
 4. nextPage(force) - method for fetching next page of results. Returns $.Deferred.
 "force" allows you to request next page from server even if next is undefined (you don't know total number of results).
-It's just requesting "currentPage()+1" page
+It simply requests "currentPage()+1" page
 5. previousPage() - method for fetching previous page of results. Returns $.Deferred
 6. loadPage( page ) - method for fetching custom page of results. Returns $.Deferred
 7. setUrlParams(), getUrlParams(), setUrlParam(), removeUrlParam() - methods for managing additional params for fetching collection
