@@ -148,8 +148,8 @@ NewsCollection.setUrlParams({
 
 ### Get model from whole collection (from other pages)
 
-Then you need to get a model from your collection you can use get() method. But since we have paginatable collections,
-there is a situations than requested model is not located in the loaded piece of collection. So get() will return false;
+When you need to get a model from your collection you can use get() method. But since we have paginatable collections,
+there is situations when requested model is not in the loaded piece of collection. So get() will return false;
 Of course, you can manually create this model, set an ID and URL for it and fetch it from server.
 But this isn't a good idea because you need to get this URL from somewhere. So, there is another way - receive().
 
@@ -177,11 +177,11 @@ NewsCollection
 
 ```
 
-receive() method is clever and if needed model is already loaded in collection it won't made another request for this model,
-but will return you an existing model.
+receive() method is clever and if requested model is already loaded in collection it won't made another request for this model,
+but will return you an existing model instead.
 
 IMPORTANT!
-receive() method doesn't adds received model to current collection! If you need to add it to current page result set -
+receive() method doesn't add received model to current collection! If you need to add it to current page result set -
 do it manually (collection.add(model));
 
 
