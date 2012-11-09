@@ -1,157 +1,175 @@
-Backbone.actAs = Backbone.actAs || {};
+(function (name, definition){
+    if (typeof define === 'function'){ // AMD
+        define(definition);
+    } else if (typeof module !== 'undefined' && module.exports) { // Node.js
+        module.exports = definition();
+    } else { // Browser
+        var theModule = definition(), global = this, old = global[name];
+        theModule.noConflict = function () {
+            global[name] = old;
+            return theModule;
+        };
+        global[name] = theModule;
+    }
+})('Backbone.actAs.Paginatable', function () {
 
-Backbone.actAs.Paginatable = {
-	init: function(collection, model){
-		collection	= collection || Backbone.Collection;
-		model		= model || Backbone.Model;
-		_.extend(collection.prototype, Backbone.actAs.Paginatable.Collection);
-		_.extend(model.prototype, Backbone.actAs.Paginatable.Model);
-	}
-}
+    Backbone.actAs = Backbone.actAs || {};
 
-Backbone.actAs.Paginatable.Model = (function(){
-	return {
-		urlRoot: function(){
-			if( this.collection && this.collection.modelUrlRoot ){
-				return this.collection.modelUrlRoot;
-			}
-			if( this.collection && this.collection.urlRoot ){
-				return this.collection.urlRoot;
-			}
-			return this.prototype.urlRoot;
-		}
-	};
-})();
+    Backbone.actAs.Paginatable = {
+        init: function(collection, model){
+            collection	= collection || Backbone.Collection;
+            model		= model || Backbone.Model;
+            _.extend(collection.prototype, Backbone.actAs.Paginatable.Collection);
+            _.extend(model.prototype, Backbone.actAs.Paginatable.Model);
+        }
+    }
 
-Backbone.actAs.Paginatable.Collection = (function(){
-	return {
+    Backbone.actAs.Paginatable.Model = (function(){
+        return {
+            urlRoot: function(){
+                if( this.collection && this.collection.modelUrlRoot ){
+                    return this.collection.modelUrlRoot;
+                }
+                if( this.collection && this.collection.urlRoot ){
+                    return this.collection.urlRoot;
+                }
+                return this.prototype.urlRoot;
+            }
+        };
+    })();
 
-		actAs_Paginatable_totalItems: false,
-		actAs_Paginatable_currentPage: 1,
-		actAs_Paginatable_itemsPerPage: 20,
+    Backbone.actAs.Paginatable.Collection = (function(){
+        return {
 
-		actAs_Paginatable_currentPage_attr: 'page',
-		actAs_Paginatable_itemsPerPage_attr: 'itemsPerPage',
+            actAs_Paginatable_totalItems: false,
+            actAs_Paginatable_currentPage: 1,
+            actAs_Paginatable_itemsPerPage: 20,
 
-		receive: function(id){
-			var result = $.Deferred(),
-				model = this.get(id);
-			if( model ){
-				result.resolve(model);
-			}else{
-				model = new this.model({id: id});
-				if( this.modelUrlRoot ){
-					model.url = this.modelUrlRoot+'/'+id;
-				}else if( this.urlRoot ){
-					model.url = this.urlRoot+'/'+id;
-				}
+            actAs_Paginatable_currentPage_attr: 'page',
+            actAs_Paginatable_itemsPerPage_attr: 'itemsPerPage',
 
-				model.fetch().done(function(){
-					result.resolve(model);
-				})
-				.fail(function(){
-					result.reject();
-				})
-			}
-			return result.promise();
-		},
+            receive: function(id){
+                var result = $.Deferred(),
+                    model = this.get(id);
+                if( model ){
+                    result.resolve(model);
+                }else{
+                    model = new this.model({id: id});
+                    if( this.modelUrlRoot ){
+                        model.url = this.modelUrlRoot+'/'+id;
+                    }else if( this.urlRoot ){
+                        model.url = this.urlRoot+'/'+id;
+                    }
 
-		itemsPerPage: function( itemsPerPage ){
-			if( typeof itemsPerPage != 'undefined' ){
-				this.actAs_Paginatable_itemsPerPage = itemsPerPage;
-			};
-			return this.actAs_Paginatable_itemsPerPage;
-		},
+                    model.fetch().done(function(){
+                        result.resolve(model);
+                    })
+                    .fail(function(){
+                        result.reject();
+                    })
+                }
+                return result.promise();
+            },
 
-		currentPage: function( page ){
-			if( typeof page != 'undefined' ){
-				this.actAs_Paginatable_currentPage = page;
-			};
-			return this.actAs_Paginatable_currentPage;
-		},
+            itemsPerPage: function( itemsPerPage ){
+                if( typeof itemsPerPage != 'undefined' ){
+                    this.actAs_Paginatable_itemsPerPage = itemsPerPage;
+                };
+                return this.actAs_Paginatable_itemsPerPage;
+            },
 
-		loadPage: function(page){
-			if( page ){
-				this.currentPage( page );
-				return this.fetch();
-			}
-			var result = $.Deferred();
-			result.reject();
-			return result;
-		},
+            currentPage: function( page ){
+                if( typeof page != 'undefined' ){
+                    this.actAs_Paginatable_currentPage = page;
+                };
+                return this.actAs_Paginatable_currentPage;
+            },
 
-		nextPage: function(force){
-			var nextPage = force?(this.currentPage()+1):this.paginationInfo().nextPage;
-			return this.loadPage(nextPage);
-		},
+            loadPage: function(page){
+                if( page ){
+                    this.currentPage( page );
+                    return this.fetch();
+                }
+                var result = $.Deferred();
+                result.reject();
+                return result;
+            },
 
-		previousPage: function(){
-			return this.loadPage(this.paginationInfo().previousPage);
-		},
+            nextPage: function(force){
+                var nextPage = force?(this.currentPage()+1):this.paginationInfo().nextPage;
+                return this.loadPage(nextPage);
+            },
 
-		paginationInfo: function(){
-			var result = {
-				totalItems: this.actAs_Paginatable_totalItems,
-				totalPages: (this.actAs_Paginatable_totalItems)?(Math.ceil(this.actAs_Paginatable_totalItems/this.itemsPerPage())):false,
+            previousPage: function(){
+                return this.loadPage(this.paginationInfo().previousPage);
+            },
 
-				itemsPerPage: this.itemsPerPage(),
+            paginationInfo: function(){
+                var result = {
+                    totalItems: this.actAs_Paginatable_totalItems,
+                    totalPages: (this.actAs_Paginatable_totalItems)?(Math.ceil(this.actAs_Paginatable_totalItems/this.itemsPerPage())):false,
 
-				currentPage: this.currentPage(),
-				previousPage: false,
-				nextPage: false
-			};
+                    itemsPerPage: this.itemsPerPage(),
 
-			if( result.currentPage > 1 ){
-				result.previousPage = result.currentPage-1;
-			}
-			if( ( result.currentPage < result.totalPages ) && ( result.totalPages > 1 ) ){
-				result.nextPage = result.currentPage+1;
-			}
+                    currentPage: this.currentPage(),
+                    previousPage: false,
+                    nextPage: false
+                };
 
-			return result;
-		},
+                if( result.currentPage > 1 ){
+                    result.previousPage = result.currentPage-1;
+                }
+                if( ( result.currentPage < result.totalPages ) && ( result.totalPages > 1 ) ){
+                    result.nextPage = result.currentPage+1;
+                }
 
-		getUrlParams: function(){
-			if( typeof this.urlParams == 'undefined' ) this.urlParams = {};
-			return _.clone(this.urlParams);
-		},
+                return result;
+            },
 
-		setUrlParams: function(params){
-			this.urlParams = _.clone(params);
-			return this.getUrlParams();
-		},
+            getUrlParams: function(){
+                if( typeof this.urlParams == 'undefined' ) this.urlParams = {};
+                return _.clone(this.urlParams);
+            },
 
-		removeUrlParam: function(param){
-			var params = this.getUrlParams();
-			delete params[param];
-			this.setUrlParams(params);
-			return this;
-		},
+            setUrlParams: function(params){
+                this.urlParams = _.clone(params);
+                return this.getUrlParams();
+            },
 
-		setUrlParam: function(param, value){
-			var params = this.getUrlParams();
-			params[param] = value;
-			this.setUrlParams(params);
-			return this;
-		},
+            removeUrlParam: function(param){
+                var params = this.getUrlParams();
+                delete params[param];
+                this.setUrlParams(params);
+                return this;
+            },
+
+            setUrlParam: function(param, value){
+                var params = this.getUrlParams();
+                params[param] = value;
+                this.setUrlParams(params);
+                return this;
+            },
 
 
-		url: function(){
-			if( typeof this.urlRoot == 'undefined' ){
-				return Backbone.Collection.prototype.url.apply(this, arguments );
-			}
-			var params = this.getUrlParams();
-			params[this.actAs_Paginatable_currentPage_attr] = this.actAs_Paginatable_currentPage;
-			params[this.actAs_Paginatable_itemsPerPage_attr] = this.actAs_Paginatable_itemsPerPage;
-			return this.urlRoot + ((this.urlRoot.indexOf('?')===-1)?'?':'&') + $.param(params);
-		},
+            url: function(){
+                if( typeof this.urlRoot == 'undefined' ){
+                    return Backbone.Collection.prototype.url.apply(this, arguments );
+                }
+                var params = this.getUrlParams();
+                params[this.actAs_Paginatable_currentPage_attr] = this.actAs_Paginatable_currentPage;
+                params[this.actAs_Paginatable_itemsPerPage_attr] = this.actAs_Paginatable_itemsPerPage;
+                return this.urlRoot + ((this.urlRoot.indexOf('?')===-1)?'?':'&') + $.param(params);
+            },
 
-		parse: function(resp, result) {
-			if( result.getResponseHeader('X-Pagination-Total-Results') ){
-				this.actAs_Paginatable_totalItems = result.getResponseHeader('X-Pagination-Total-Results');
-			}
-			return resp;
-		}
+            parse: function(resp, result) {
+                if( result.getResponseHeader('X-Pagination-Total-Results') ){
+                    this.actAs_Paginatable_totalItems = result.getResponseHeader('X-Pagination-Total-Results');
+                }
+                return resp;
+            }
 
-	};
-})();
+        };
+    })();
+
+    return Backbone.actAs.Paginatable;
+});

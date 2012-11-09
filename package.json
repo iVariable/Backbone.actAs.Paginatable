@@ -1,0 +1,44 @@
+{
+    "name": "backbone.actas.paginatable",
+    "version": "0.2.3",
+    "description": "Paginatable backbone collections for large model sets",
+    "homepage": "https://github.com/iVariable/Backbone.actAs.Paginatable",
+    "keywords": [
+        "paginatable",
+        "backbone",
+        "backbone.actas"
+    ],
+    "jam": {
+        "dependencies": {
+            "backbone": ">=0.9.2"
+        },
+        "main": "src/Backbone.actAs.Paginatable.js",
+        "include": [
+            "src/Backbone.actAs.Paginatable.js"
+        ],
+        "shim": {
+            "deps": ["backbone"],
+            "exports": "Backbone.actAs.Paginatable"
+        }
+    },
+    "maintainers": [
+        {
+            "name": "Vladimir Savenkov",
+            "email": "ivariable@gmail.com",
+            "web": "http://ivariable.ru"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/iVariable/Backbone.actAs.Paginatable"
+        }
+    ],
+    "github": "https://github.com/iVariable/Backbone.actAs.Paginatable"
+}

@@ -14,6 +14,13 @@ with total number of models in your set if you want to use paginationInfo() meth
 If you just want next page, and you don't need knowledge about how mush pages
 left (like twitter posts strip) you can skip "X-Pagination-Total-Results" implemetation.
 
+## Installation
+
+You can include this plugin directly into your project, or through Jam
+```
+jam install backbone.actas.paginatable
+```
+
 ## Setup plugin
 
 Call Backbone.actAsPaginatable.init( collection, model ) on your collections and
@@ -215,6 +222,10 @@ It simply requests "currentPage()+1" page
 8. receive() - get model from server by id
 
 # ChangeLog
+
+## v0.2.3
+* Plugin wrapped into unversal module loader.
+* Added package.json for npm and jam.
 
 ## v0.2.2
 
