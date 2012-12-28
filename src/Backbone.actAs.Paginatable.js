@@ -161,9 +161,14 @@
                 return this.urlRoot + ((this.urlRoot.indexOf('?')===-1)?'?':'&') + $.param(params);
             },
 
-            parse: function(resp, result) {
-                if( result.getResponseHeader('X-Pagination-Total-Results') ){
-                    this.actAs_Paginatable_totalItems = result.getResponseHeader('X-Pagination-Total-Results');
+            parse: function(resp, options) {
+                if( options && options.hasOwnProperty('getResponseHeader') ){
+                    options = {
+                        xhr: options
+                    };
+                }
+                if( options && options.xhr.getResponseHeader('X-Pagination-Total-Results') ){
+                    this.actAs_Paginatable_totalItems = options.xhr.getResponseHeader('X-Pagination-Total-Results');
                 }
                 return resp;
             }

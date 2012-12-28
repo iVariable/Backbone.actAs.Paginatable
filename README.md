@@ -6,7 +6,10 @@ piece by piece.
 
 # Getting started
 
-No special requirements for frontend. Tested on Backbone v0.9.2
+No special requirements for frontend. Tested on Backbone v0.9.2 and >v0.9.9 (see https://github.com/documentcloud/backbone/pull/1951)
+
+IMPORTANT! Backbone v0.9.9 is not fully supported because of parse issue(https://github.com/documentcloud/backbone/pull/1951).
+Use older or edge version of backbone instead of 0.9.9.
 
 As for the backend you need to pass special "X-Pagination-Total-Results" header
 with total number of models in your set if you want to use paginationInfo() method.
@@ -222,6 +225,9 @@ It simply requests "currentPage()+1" page
 8. receive() - get model from server by id
 
 # ChangeLog
+
+## v0.2.4
+* Added backbone >v0.9.9 support (currently master) (https://github.com/documentcloud/backbone/pull/1951)
 
 ## v0.2.3
 * Plugin wrapped into unversal module loader.
