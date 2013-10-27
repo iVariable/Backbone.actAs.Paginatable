@@ -1,6 +1,6 @@
 {
     "name": "backbone.actas.paginatable",
-    "version": "0.2.3",
+    "version": "0.2.5",
     "description": "Paginatable backbone collections for large model sets",
     "homepage": "https://github.com/iVariable/Backbone.actAs.Paginatable",
     "keywords": [

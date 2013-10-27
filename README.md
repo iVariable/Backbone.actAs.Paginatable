@@ -14,7 +14,7 @@ Use older or edge version of backbone instead of 0.9.9.
 As for the backend you need to pass special "X-Pagination-Total-Results" header
 with total number of models in your set if you want to use paginationInfo() method.
 
-If you just want next page, and you don't need knowledge about how mush pages
+If you just want next page, and you don't need knowledge about how much pages
 left (like twitter posts strip) you can skip "X-Pagination-Total-Results" implemetation.
 
 ## Installation
@@ -225,6 +225,9 @@ It simply requests "currentPage()+1" page
 8. receive() - get model from server by id
 
 # ChangeLog
+
+## v0.2.5
+* Added bower support
 
 ## v0.2.4
 * Added backbone >v0.9.9 support (currently master) (https://github.com/documentcloud/backbone/pull/1951)

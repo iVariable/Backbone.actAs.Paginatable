@@ -1,0 +1,11 @@
+{
+    "name": "backbone.actas.paginatable",
+    "version": "0.2.5",
+    "dependencies": {
+        "backbone": "~1.0.0"
+    },
+    "devDependencies": {
+        "qunit": "~1.7.0",
+        "jquery-mockjax": "~1.5.0"
+    }
+}
