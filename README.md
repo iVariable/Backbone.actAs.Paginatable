@@ -24,6 +24,11 @@ You can include this plugin directly into your project, or through Jam
 jam install backbone.actas.paginatable
 ```
 
+Also you can install it via bower
+```
+bower install --save backbone.actas.paginatable
+```
+
 ## Setup plugin
 
 Call Backbone.actAsPaginatable.init( collection, model ) on your collections and
